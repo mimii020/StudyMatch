@@ -9,22 +9,22 @@ import { usePathname } from 'next/navigation';
 
 const routes = [
   {
-    href: "",
+    href: "home",
     label: "Home",
     icon: HomeIcon
   },
   {
-    href: "Chat",
+    href: "chat",
     label: "Chat",
     icon: Layers2Icon
   },
   {
-    href: "Dashboard",
+    href: "dashboard",
     label: "Dashboard",
     icon: ShieldCheckIcon
   },
   {
-    href: "Profile",
+    href: "profile",
     label: "Profile",
     icon: CoinsIcon
   }

@@ -21,7 +21,7 @@ function HomePage() {
         <select value={selectedSuject} onChange={handleChange} className="rounded-2xl border-2 border-gray-400 w-1/5 text-center font-bold">
           {
             subjects.map((subject, index) => (
-              <option key={index} value={subject} className="">{subject}</option>
+              <option key={index} value={subject} className="focus:outline-none hover:outline-none hover:ring-2 hover:ring-purple-300">{subject}</option>
             ))
           }
         </select>
