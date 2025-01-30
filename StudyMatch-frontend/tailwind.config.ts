@@ -27,6 +27,8 @@ const config: Config = {
   		},
   		colors: {
 			'light-violet': '#F7F1FD',
+			'light-gray': '#F7F7F7',
+			'dark-gray': '#9E9999',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
