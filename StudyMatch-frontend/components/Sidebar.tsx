@@ -27,7 +27,7 @@ const routes = [
     href: "/main/profile",
     label: "Profile",
     icon: CoinsIcon
-  }
+  },
 ]
 
 function DesktopSidebar() {
