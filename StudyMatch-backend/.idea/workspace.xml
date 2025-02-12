@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="70feab8c-a659-4947-9c48-bd2e421a9621" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/DTO/InterestViewDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/DTO/LunchMatchRequestDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/DTO/NewInterestDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/DTO/ViewLunchMatchDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/LunchMatchApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/Security/BeanConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/Security/JwtFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/Security/JwtService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/Security/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/Security/UserDetailsServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/auth/AuthenticationRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/auth/AuthenticationResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/auth/RegistrationRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/auth/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/auth/SecretKeyGenerator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/auth/Token.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/auth/TokenBlackListService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/controllers/AuthenticationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/controllers/InterestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/controllers/LunchMatchController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/models/Interest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/models/LunchMatch.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/models/MatchStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/models/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/repositories/InterestRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/repositories/LunchMatchRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/repositories/RoleRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/repositories/TokenRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/repositories/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/services/AuthenticationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/services/InterestService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/LunchMatch/services/LunchMatchService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/LunchMatch/LunchMatchApplicationTests.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2jFDUN6gtPIRTETcwLoDm76ebfA" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.SecretKeyGenerator.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.LunchMatchApplication.executor": "Run",
+    "Spring Boot.StudyMatchApplication.executor": "Run",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Lenovo/Documents/next_projects/StudyMatch/StudyMatch-backend/study_match_backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "editor.preferences.import",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.LunchMatch.Security" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.StudyMatchApplication">
+    <configuration name="SecretKeyGenerator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.LunchMatch.auth.SecretKeyGenerator" />
+      <module name="LunchMatch" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.LunchMatch.auth.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StudyMatchApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="StudyMatch-backend" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.StudyMatch.StudyMatchApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.SecretKeyGenerator" />
+      <item itemvalue="Spring Boot.StudyMatchApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.SecretKeyGenerator" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="70feab8c-a659-4947-9c48-bd2e421a9621" name="Changes" comment="" />
+      <created>1720973945911</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1720973945911</updated>
+      <workItem from="1720973947016" duration="9206000" />
+      <workItem from="1721045705055" duration="7364000" />
+      <workItem from="1721130803000" duration="12896000" />
+      <workItem from="1721225362496" duration="259000" />
+      <workItem from="1721225635119" duration="2953000" />
+      <workItem from="1721230180833" duration="13797000" />
+      <workItem from="1721342173395" duration="4966000" />
+      <workItem from="1721401212226" duration="2385000" />
+      <workItem from="1721404652421" duration="1579000" />
+      <workItem from="1723070953201" duration="785000" />
+      <workItem from="1723129603370" duration="10246000" />
+      <workItem from="1723221368149" duration="6002000" />
+      <workItem from="1723234573075" duration="5081000" />
+      <workItem from="1723302719908" duration="7888000" />
+      <workItem from="1724078759974" duration="1338000" />
+      <workItem from="1724080126114" duration="4227000" />
+      <workItem from="1724145119960" duration="9907000" />
+      <workItem from="1724190544051" duration="631000" />
+      <workItem from="1724261382483" duration="4006000" />
+      <workItem from="1724321327938" duration="6512000" />
+      <workItem from="1724356459553" duration="2405000" />
+      <workItem from="1724443958541" duration="8346000" />
+      <workItem from="1726182016345" duration="24000" />
+      <workItem from="1726364859089" duration="358000" />
+      <workItem from="1727026866853" duration="12910000" />
+      <workItem from="1731008644125" duration="373000" />
+      <workItem from="1731358706678" duration="2301000" />
+      <workItem from="1731848428011" duration="14000" />
+      <workItem from="1732016652598" duration="600000" />
+      <workItem from="1732040541371" duration="9000" />
+      <workItem from="1732542113833" duration="599000" />
+      <workItem from="1732558139436" duration="601000" />
+      <workItem from="1732631363906" duration="10000" />
+      <workItem from="1732640126280" duration="598000" />
+      <workItem from="1732720804054" duration="241000" />
+      <workItem from="1732721448341" duration="595000" />
+      <workItem from="1732728614031" duration="232000" />
+      <workItem from="1732734276637" duration="288000" />
+      <workItem from="1732813633453" duration="11000" />
+      <workItem from="1733586597431" duration="9000" />
+      <workItem from="1733618970630" duration="8000" />
+      <workItem from="1733768973824" duration="14000" />
+      <workItem from="1733840052050" duration="51000" />
+      <workItem from="1738412782353" duration="229000" />
+      <workItem from="1738413056144" duration="242000" />
+      <workItem from="1738421052105" duration="5774000" />
+      <workItem from="1738444498476" duration="5489000" />
+      <workItem from="1738453130276" duration="26000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="org.springframework.beans.factory.UnsatisfiedDependencyException" package="org.springframework.beans.factory" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="org.springframework.context.ApplicationContextException" package="org.springframework.context" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NumberFormatException" package="java.lang" />
+          <option name="timeStamp" value="4" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
