@@ -20,8 +20,8 @@ function Logo({
             ></SquareDashedMousePointer>
         </div>
         <div>
-            <span className="bg-gradient-to-r from-primary/70 to-primary bg-clip-text text-transparent">Flow</span>
-            <span className='text-stone-700 dark:text-stone-300'>y</span>
+            <span className="bg-gradient-to-r from-primary/70 to-primary bg-clip-text text-transparent">Study</span>
+            <span className='text-stone-700 dark:text-stone-300'>Match</span>
         </div>
     </Link>
   )
