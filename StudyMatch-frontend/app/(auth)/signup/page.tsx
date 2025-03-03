@@ -1,26 +1,74 @@
 "use client"
 
-import React from 'react'
+import React, { useState } from 'react'
 import AuthField from '../components/AuthField'
 import PrimaryButton from '@/components/PrimaryButton'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { SignupRequest } from '@/lib/services/auth/interface'
+import { signup } from '@/lib/services/auth/auth.service'
+import { RolesEnum } from '@/lib/enums/roles.enum'
 
-function page() {
+function Page() {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [formData, setFormData] = useState<SignupRequest>({
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: ''
+        }
+    );
+
+    const handleSumbit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        try {
+            const signupRequest: SignupRequest = {
+                firstname: formData.firstname,
+                lastname: formData.lastname,
+                email: formData.email,
+                password: formData.password           
+            };
+            const response = await signup(signupRequest);
+            console.log("student signup", response);
+            if (response.status == 202) {
+                router.push('/login');
+            }
+
+            else {
+                throw new Error("signup failed");
+            }
+        } catch (err) {
+            setError(String(err));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const onChange = (value: string, fieldName: string) => {
+        setFormData({
+            ...formData,
+            [fieldName]: value
+        });
+    }
     const signupFields = [
         {
-            name: "Firstname",
+            name: "firstname",
             label: "Enter your firstname",
         },
         {
-            name: "Lastname",
+            name: "lastname",
             label: "Enter your lastname",
         },
         {
-            name: "Email",
+            name: "email",
             label: "Enter your email",
         },
         {
-            name: "Password",
+            name: "password",
             label: "Enter your password",
         }
     ]
@@ -30,11 +78,21 @@ function page() {
         <form action="" className="w-full flex flex-col justify-center gap-20 text-2xl">
             {
                 signupFields.map((signupField, key) => (
-                    <AuthField key={key} name={signupField.name} label={signupField.label} />
+                    <AuthField 
+                        key={key} 
+                        name={signupField.name} 
+                        label={signupField.label} 
+                        value={formData[signupField.name as keyof typeof formData]} 
+                        onChange={onChange}
+                    />
                 ))
             }
 
-            <PrimaryButton padding="25px" text="Sign In"/>
+            <PrimaryButton 
+                padding="25px" 
+                text="Sign In"
+                onClick={handleSumbit}
+            />
         </form>
 
         <div>
@@ -45,4 +103,4 @@ function page() {
   )
 }
 
-export default page
+export default Page
