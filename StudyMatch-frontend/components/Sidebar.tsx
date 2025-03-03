@@ -6,6 +6,9 @@ import Logo from './Logo';
 import Link from 'next/link';
 import { buttonVariants } from './ui/button';
 import { usePathname } from 'next/navigation';
+import { useAppSelector } from '@/lib/hooks/useAppSelector';
+
+
 
 const routes = [
   {
@@ -24,7 +27,7 @@ const routes = [
     icon: ShieldCheckIcon
   },
   {
-    href: "/main/profile",
+    href: "/main/profile/me",
     label: "Profile",
     icon: CoinsIcon
   },
@@ -35,6 +38,9 @@ function DesktopSidebar() {
   const activeRoute = routes.find(route => route.href.length>0
     && pathName.includes(route.href) 
   ) || routes[0];
+
+  const authState = useAppSelector((state) => (state.auth));
+
   return (
     <div className='hidden relative md:block min-w-[280px] max-w-[280px] h-screen overflow-hidden 
     w-full bg-primary/5 dark:bg-secondary/30 dark:text-foreground text-muted-foreground 
@@ -44,19 +50,22 @@ function DesktopSidebar() {
       </div>
       <div className="flex flex-col">
         {
-          routes.map((route) => (
-            <Link key={route.href} href={route.href}
-            className={buttonVariants({
-              variant: activeRoute.href === route.href 
-              ? "sidebarActiveIItem" 
-              : "sidebarItem"
-            })}
-            >
-              <route.icon size={20}></route.icon>
-              {route.label}
-            </Link>
-          ) )
-        }
+          routes.map((route) => {
+            return (
+              <Link key={route.href} href={route.href}
+              className={buttonVariants({
+                variant: activeRoute.href === route.href 
+                ? "sidebarActiveIItem" 
+                : "sidebarItem"
+              })}
+              >
+                <route.icon size={20}></route.icon>
+                {route.label}
+              </Link>
+            )
+          }
+        )
+      }
       </div>
     </div>
   );
