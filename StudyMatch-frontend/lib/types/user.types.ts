@@ -1,3 +1,4 @@
+import { Skill } from "../services/skill/interface";
 
 export type StudentProfile = {
     id: number;

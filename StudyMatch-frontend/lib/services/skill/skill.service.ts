@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Skill } from './interface';
 
 //load skills based on their subject
 //this is different from the student's skils
@@ -49,6 +50,6 @@ export const skillApi = createApi({
 });
 
 export const {
-  useGetSkillByIdQuery,
+  useGetSkillsBySubjectIdQuery,
   useSearchSkillsQuery
 } = skillApi;

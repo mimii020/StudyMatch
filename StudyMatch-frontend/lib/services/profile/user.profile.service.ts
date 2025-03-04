@@ -1,8 +1,10 @@
 import { StudentProfile } from '@/lib/types/user.types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AddSkillRequest, StudentUpdateProfile } from './interface';
+import { AddSkillRequest, StudentSearchRequest, StudentUpdateProfile } from './interface';
 
-//get student profile info
+//get my profile info
+//search students
+//view another student's profile
 //add skill (desired/offered)
 //delete skill
 //add bio
@@ -20,6 +22,20 @@ export const studentApi = createApi({
   }),
   tagTypes: ['Student'],
   endpoints: (builder) => ({
+    searchStudents: builder.query<StudentProfile[], StudentSearchRequest>({
+      query: (studentSearchRequest) => ({
+        url: "/students/search",
+        method: "POST",
+        body: studentSearchRequest
+      }),
+      providesTags:  (result) =>
+        result
+          ? [
+              { type: 'Student', id: 'LIST' },
+              ...result.map((student: StudentProfile) => ({ type: 'Student' as const, id: student.id }))
+            ]
+          : [{ type: 'Student', id: 'LIST' }]
+    }),
     getStudentById: builder.query<StudentProfile, number>({
       query: (studentId) => `/students/${studentId}`,
       providesTags: (result) => result ? [{ type: 'Student', id: result.id }] : [],
@@ -30,10 +46,10 @@ export const studentApi = createApi({
     }),
 
     updateMyProfile: builder.mutation<StudentProfile, Partial<StudentUpdateProfile>>({
-      query: (StudentUpdateProfile) => ({
+      query: (studentUpdateProfile) => ({
         url: '/students/me',
         method: 'PATCH',
-        body: StudentUpdateProfile,
+        body: studentUpdateProfile,
       }),
       invalidatesTags: (result) => result ? [{ type: 'Student', id: result.id }] : [{ type: 'Student', id: 'ME' }],
     }),
@@ -65,12 +81,11 @@ export const studentApi = createApi({
       }),
       invalidatesTags: [{ type: 'Student', id: 'LIST' }],
     }),
-
-    
   }),
 });
 
 export const {
+  useLazySearchStudentsQuery,
   useGetStudentByIdQuery,
   useGetMyProfileQuery,
   useUpdateMyProfileMutation,

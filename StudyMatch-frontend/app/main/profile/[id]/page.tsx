@@ -5,6 +5,7 @@ import SkillList from '@/components/SkillList'
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser'
 import { useGetMyProfileQuery, useGetStudentByIdQuery } from '@/lib/services/profile/user.profile.service'
 import { useParams } from 'next/navigation'
+import { useRouter } from 'next/router'
 import React from 'react'
 interface PageProps {
   params: {
@@ -14,8 +15,11 @@ interface PageProps {
 
 
 const Page: React.FC<PageProps> = ({ params }) => {
-  const { id } = params;
-  const { data } = useGetStudentByIdQuery(id);
+  const route = useRouter();
+  const { id } = route.query;
+  const studentId = Number(id);
+  const { data } = useGetStudentByIdQuery(studentId);
+  
   return (
     <div className="w-full h-full relative">
             <div className="w-full h-1/3 bg-purple-300"></div>
