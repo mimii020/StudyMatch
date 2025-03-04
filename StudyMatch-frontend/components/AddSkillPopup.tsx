@@ -5,9 +5,8 @@ import PrimaryButton from './PrimaryButton';
 import SecondaryButton from './SecondaryButton';
 import { useGetSubjectsQuery } from '@/lib/services/subject/subject.service';
 import { useSearchSkillsQuery } from '@/lib/services/skill/skill.service';
-import { useAddSkillMutation, useGetMyProfileQuery } from '@/lib/services/profile/user.profile.service';
-import { AddSkillRequest } from '@/lib/services/profile/interface';
-import { SkillTypeEnum } from '@/lib/enums/skill.type.enum';
+import { Skill } from '@/lib/services/skill/interface';
+
 
 interface PopupProps {
     title: string;
@@ -24,17 +23,25 @@ function AddSkillPopup({
     const [isSkillsOpen, setIsSkillsOpen] = useState(true);
     const { data: subjects, isLoading } = useGetSubjectsQuery();
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
-    const [searchQuery, setSearchQuery] = useState("");
     
     useEffect(() => {
       if (subjects && subjects.length > 0 && !selectedSubject && !isLoading) {
         setSelectedSubject(subjects[0])
       }
     }, [subjects, selectedSubject, isLoading]);
+
+    const [debouncedInput, setDebouncedInput] = useState("");
+  
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedInput(input);
+      }, 300);
+      return () => clearTimeout(handler);
+    }, [input]);
     
     const { data: skills } = useSearchSkillsQuery({
       subjectId: selectedSubject?.id!,
-      query: searchQuery
+      query: debouncedInput
     },
     {
       skip: !selectedSubject
@@ -47,7 +54,7 @@ function AddSkillPopup({
         const subjectId = Number(event.target.value);
         const subject = subjects?.find((s) => s.id === subjectId) || null;
         setSelectedSubject(subject);
-        setSearchQuery("");
+        setInput("");
         console.log(selectedSubject);
       }
 
@@ -63,9 +70,12 @@ function AddSkillPopup({
         <Separator/>
         <input
             type="text"
-            placeholder={input}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search Skills"
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value)
+              setIsSkillsOpen(true)
+            }}
             className="px-6 rounded-2xl h-[15%]"
         />
         {

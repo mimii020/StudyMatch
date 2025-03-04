@@ -99,7 +99,7 @@ function ChatPage() {
         <div className="overflow-hidden flex-1">
             <div className="w-full h-full px-4 flex flex-col gap-4">
                 <div className="h-[5.76%] w-full">
-                    <SearchField/>
+                    <SearchField placeholder="Search for convos"/>
                 </div>
                 {
                     messagesPreview.map((message) => (
