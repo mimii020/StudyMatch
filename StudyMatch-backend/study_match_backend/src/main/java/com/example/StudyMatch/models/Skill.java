@@ -1,6 +1,7 @@
 package com.example.StudyMatch.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,17 +19,18 @@ public class Skill {
     @GeneratedValue
     private Integer id;
 
-    @ManyToMany(mappedBy = "desiredSkills", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "desiredSkills", fetch = FetchType.LAZY)
     @JsonBackReference
     private List<Student> studentsDesiringThisSkill = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "offeredSkills", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "offeredSkills", fetch = FetchType.LAZY)
     @JsonBackReference
     private List<Student> studentsOfferingThisSkill = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     @JsonBackReference
+    @JsonIgnore
     private Subject subject;
     private String name;
 }

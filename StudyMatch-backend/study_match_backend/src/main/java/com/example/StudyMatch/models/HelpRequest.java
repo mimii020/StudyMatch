@@ -2,6 +2,7 @@ package com.example.StudyMatch.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -15,12 +16,25 @@ public class HelpRequest {
     @Id
     @GeneratedValue
     private Integer id;
-    private LocalDateTime date;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    private User sender;
+    private Student sender;
+
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    private User receiver;
+    private Student receiver;
+
+    @Enumerated(EnumType.STRING)
     private HelpRequestStatus status;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
+
+    private String description;
 }

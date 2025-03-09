@@ -1,7 +1,9 @@
 package com.example.StudyMatch.controllers;
 
-import com.example.StudyMatch.DTO.LunchMatchRequestDTO;
-import com.example.StudyMatch.DTO.ViewLunchMatchDTO;
+import com.example.StudyMatch.DTO.CreateHelpRequestDTO;
+import com.example.StudyMatch.DTO.UpdateHelpRequestDto;
+import com.example.StudyMatch.DTO.ViewHelpRequestDTO;
+import com.example.StudyMatch.models.HelpRequest;
 import com.example.StudyMatch.models.User;
 import com.example.StudyMatch.services.HelpRequestService;
 import lombok.RequiredArgsConstructor;
@@ -12,56 +14,44 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("help-requests")
 @RequiredArgsConstructor
 public class HelpRequestController {
     @Autowired
-    private HelpRequestService lunchMatchService;
+    private HelpRequestService helpRequestService;
 
     @PostMapping()
-    public ResponseEntity<String> sendMatchRequest(
-            @RequestBody LunchMatchRequestDTO lunchMatchDTO,
+    public ResponseEntity<HelpRequest> sendMatchRequest(
+            @RequestBody CreateHelpRequestDTO createHelpRequestDTO,
             Authentication authentication
             ) {
 
-        lunchMatchService.sendMatchRequest(lunchMatchDTO, authentication);
-        return ResponseEntity.ok("lunch match request sent successfully");
+        HelpRequest helpRequest = helpRequestService.sendHelpRequest(createHelpRequestDTO, authentication);
+        return ResponseEntity.ok(helpRequest);
 
     }
 
-    @PutMapping(value = "/sent-requests/{matchId}/accept")
-    public ResponseEntity<String> acceptLunchMatch(
-            @PathVariable("matchId") Integer matchId,
-            Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        lunchMatchService.acceptRequest(matchId, user);
-        return ResponseEntity.ok("match request accepted");
+    @PatchMapping("/{requestId}")
+    public ResponseEntity<HelpRequest> updateHelpRequestStatus(
+            @PathVariable("requestId") Integer requestId,
+            UpdateHelpRequestDto helpRequestDto) {
+        HelpRequest helpRequest = helpRequestService.updateRequestStatus(requestId, helpRequestDto.getStatus());
+        return ResponseEntity.ok(helpRequest);
+    }
+    
+
+    @GetMapping(value = "/sent")
+    public ResponseEntity<List<ViewHelpRequestDTO>> getSentRequests() {
+        List<ViewHelpRequestDTO> sentHelpRequests = helpRequestService.getSentRequests();
+        return ResponseEntity.ok(sentHelpRequests);
     }
 
-    @PutMapping(value = "/received-requests/{matchId}/deny")
-    public ResponseEntity<String> denyLunchMatch(
-            @PathVariable Integer matchId,
-            Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        lunchMatchService.denyRequest(matchId, user);
-        return ResponseEntity.ok("match request denied");
-    }
-
-
-    //Optional Body: You can pass a body to ResponseEntity.ok(), which will be included in the response. If no body is provided, it will return an empty response body with a status of 200
-    @GetMapping(value = "/sent-requests")
-    public ResponseEntity<List<ViewLunchMatchDTO>> getSentRequests(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        List<ViewLunchMatchDTO> sentMatches = lunchMatchService.getSentRequests(user);
-        return ResponseEntity.ok(sentMatches);
-    }
-
-    @GetMapping(value = "/received-requests")
-    public ResponseEntity<List<ViewLunchMatchDTO>> getReceivedRequests(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        List<ViewLunchMatchDTO> receivedMatches = lunchMatchService.getReceivedRequests(user);
-        return ResponseEntity.ok(receivedMatches);
+    @GetMapping(value = "/received")
+    public ResponseEntity<List<ViewHelpRequestDTO>> getReceivedRequests() {
+        List<ViewHelpRequestDTO> receivedHelpRequests = helpRequestService.getReceivedRequests();
+        return ResponseEntity.ok(receivedHelpRequests);
     }
 
 }
