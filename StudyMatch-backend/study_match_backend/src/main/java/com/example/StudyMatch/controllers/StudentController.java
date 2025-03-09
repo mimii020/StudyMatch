@@ -37,9 +37,18 @@ public class StudentController {
         return ResponseEntity.ok(studentViewDtos);
     }
 
+    @PreAuthorize("hasRole('STUDENT') and (#studentId != authentication.principal.id)")
     @GetMapping("/{studentId}")
     public ResponseEntity<StudentViewDto> getStudentById(@PathVariable Integer studentId) {
         StudentViewDto student = this.studentService.getStudentById(studentId);
+        return ResponseEntity.ok(student);
+    }
+
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/me")
+    public ResponseEntity<StudentViewDto> getMyProfile(Authentication authentication) {
+        User authneticatedUser = (User) authentication.getPrincipal();
+        StudentViewDto student = this.studentService.getStudentById(authneticatedUser.getId());
         return ResponseEntity.ok(student);
     }
 

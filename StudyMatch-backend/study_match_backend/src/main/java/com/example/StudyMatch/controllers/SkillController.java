@@ -2,8 +2,10 @@ package com.example.StudyMatch.controllers;
 
 import com.example.StudyMatch.DTO.InterestViewDTO;
 import com.example.StudyMatch.DTO.CreateSkillDto;
+import com.example.StudyMatch.DTO.SkillViewDto;
 import com.example.StudyMatch.models.Skill;
 import com.example.StudyMatch.services.SkillService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -53,9 +55,18 @@ public class SkillController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping
     public List<Skill> getSkillsBySubject(@PathVariable Integer subjectId) {
         return this.skillService.getSkillsBySubject(subjectId);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<SkillViewDto>> getSkillsBySubjectIdAndName(
+            @PathVariable Integer subjectId,
+            @RequestParam(required = false) String searchQuery
+    ) {
+        List<SkillViewDto> skills = skillService.searchSkills(subjectId, searchQuery);
+        return ResponseEntity.ok(skills);
     }
 }

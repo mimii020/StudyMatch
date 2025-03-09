@@ -36,6 +36,18 @@ public class StudentService {
                 .firstname(student.getFirstname())
                 .lastname(student.getLastname())
                 .bio(student.getBio())
+                        .desiredSkills(student.getDesiredSkills().stream().map(
+                                (skill)-> SkillViewDto.builder()
+                                        .id(skill.getId())
+                                        .name(skill.getName())
+                                        .build()
+                        ).collect(Collectors.toList()))
+                        .offeredSkills(student.getOfferedSkills().stream().map(
+                                (skill)-> SkillViewDto.builder()
+                                        .id(skill.getId())
+                                        .name(skill.getName())
+                                        .build()
+                        ).collect(Collectors.toList()))
                 .build()
                 ).toList();
     }

@@ -1,14 +1,19 @@
 package com.example.StudyMatch.services;
 
-import com.example.StudyMatch.DTO.LunchMatchRequestDTO;
-import com.example.StudyMatch.DTO.ViewLunchMatchDTO;
+import com.example.StudyMatch.DTO.CreateHelpRequestDTO;
+
+import com.example.StudyMatch.DTO.ViewHelpRequestDTO;
 import com.example.StudyMatch.models.HelpRequest;
 import com.example.StudyMatch.models.HelpRequestStatus;
+import com.example.StudyMatch.models.Student;
 import com.example.StudyMatch.repositories.HelpRequestRepository;
-import com.example.StudyMatch.repositories.UserRepository;
+import com.example.StudyMatch.repositories.StudentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.example.StudyMatch.models.User;
 
@@ -19,79 +24,96 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HelpRequestService {
     @Autowired
-    private HelpRequestRepository lunchMatchRepository;
+    private HelpRequestRepository helpRequestRepository;
     @Autowired
-    private UserRepository userRepository;
+    private StudentRepository studentRepository;
     //sendRequest
-    public void sendMatchRequest(LunchMatchRequestDTO lunchMatchDTO, Authentication authentication) {
-        User sender = (User) authentication.getPrincipal();
-        Integer receiverId = lunchMatchDTO.getReceiverId();
-        LocalDateTime requestDate = lunchMatchDTO.getRequestDate();
-        User receiver = userRepository.findById(receiverId)
+    public HelpRequest sendHelpRequest(CreateHelpRequestDTO helpRequestDTO, Authentication authentication) {
+        User principal = (User) authentication.getPrincipal();
+        Integer senderId = principal.getId();
+        Integer receiverId = helpRequestDTO.getReceiverId();
+
+        Student receiver =  studentRepository.findById(receiverId)
+                .orElseThrow(() -> new RuntimeException("reciever not found"));
+
+        Student sender =  studentRepository.findById(senderId)
                 .orElseThrow(() -> new RuntimeException("sender not found"));
 
-
-        if(sender != null && receiver != null) {
-            HelpRequest matchRequest = HelpRequest.builder()
-                    .date(requestDate)
-                    .sender(sender)
-                    .receiver(receiver)
-                    .status(HelpRequestStatus.PENDING)
-                    .build();
-            lunchMatchRepository.save(matchRequest);
+        if (sender == null || receiver == null) {
+           throw new EntityNotFoundException("entity was not found");
 
         }
 
-    }
-    //AcceptRequest
-    public void acceptRequest(Integer lunchMatchId, User user) {
-        HelpRequest lunchMatch = lunchMatchRepository.findById(lunchMatchId)
-                .orElseThrow(() -> new RuntimeException("match not found"));
-        if(lunchMatch.getReceiver().equals(user)) {
-            lunchMatch.setStatus(HelpRequestStatus.ACCEPTED);
-            lunchMatchRepository.save(lunchMatch);
-        }
+        HelpRequest helpRequest = HelpRequest.builder()
+                .createdAt(LocalDateTime.now())
+                .sender(sender)
+                .receiver(receiver)
+                .status(HelpRequestStatus.PENDING)
+                .build();
+        return  helpRequestRepository.save(helpRequest);
 
     }
-    //DeclineRequest
-    public void denyRequest(Integer lunchMatchId, User user) {
-        HelpRequest lunchMatch = lunchMatchRepository.findById(lunchMatchId)
-                .orElseThrow(() -> new RuntimeException("match not found"));
-        if(lunchMatch.getReceiver().equals(user)) {
-            lunchMatchRepository.delete(lunchMatch);
+
+    public HelpRequest updateRequestStatus(Integer helpRequestId, HelpRequestStatus status) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User principal = (User) authentication.getPrincipal();
+        Integer currentStudentId = principal.getId();
+        Student currentStudent = studentRepository.findById(currentStudentId)
+                .orElseThrow(() -> new RuntimeException("student not found"));
+
+        HelpRequest helpRequest = helpRequestRepository.findById(helpRequestId)
+                .orElseThrow(() -> new RuntimeException("help request not found"));
+
+        if (!helpRequest.getReceiver().getId().equals(currentStudent.getId())) {
+            throw new AccessDeniedException("You are not the receiver of this request");
         }
 
+        helpRequest.setStatus(status);
+        return helpRequestRepository.save(helpRequest);
+
     }
+
+
     //getSentRequests
-    public List<ViewLunchMatchDTO> getSentRequests(User user) {
-        List<HelpRequest> sentLunchMatches = lunchMatchRepository.findBySenderId(user.getId());
-        return sentLunchMatches.stream().map(lunchMatch -> {
-            ViewLunchMatchDTO lunchMatchDTO = ViewLunchMatchDTO.builder()
-                    .matchId(lunchMatch.getId())
-                    .receiverId(user.getId())
-                    .receiverUsername(user.fullName())
-                    .senderId(lunchMatch.getSender().getId())
-                    .senderUsername(lunchMatch.getSender().fullName())
-                    .status(String.valueOf(lunchMatch.getStatus()))
+    public List<ViewHelpRequestDTO> getSentRequests() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User principal = (User) authentication.getPrincipal();
+        Integer currentStudentId = principal.getId();
+
+        List<HelpRequest> sentHelpRequests = helpRequestRepository.findBySenderId(currentStudentId);
+        return sentHelpRequests.stream().map(helpRequest -> {
+            return ViewHelpRequestDTO.builder()
+                    .helpRequestId(helpRequest.getId())
+                    .receiverId(helpRequest.getReceiver().getId())
+                    .receiverUsername(helpRequest.getReceiver().fullName())
+                    .senderId(helpRequest.getSender().getId())
+                    .senderUsername(helpRequest.getSender().fullName())
+                    .status(String.valueOf(helpRequest.getStatus()))
                     .build();
-            return lunchMatchDTO;
         }).toList();
 
     }
 
     //getReceivedRequests
-    public List<ViewLunchMatchDTO> getReceivedRequests(User user) {
-        List<HelpRequest> receivedRequests = lunchMatchRepository.findByReceiverId(user.getId());
-        return receivedRequests.stream().map(lunchMatch -> {
-            ViewLunchMatchDTO lunchMatchDTO = ViewLunchMatchDTO.builder()
-                    .matchId(lunchMatch.getId())
-                    .receiverId(user.getId())
-                    .receiverUsername(user.fullName())
-                    .senderId(lunchMatch.getSender().getId())
-                    .senderUsername(lunchMatch.getSender().fullName())
-                    .status(String.valueOf(lunchMatch.getStatus()))
+    public List<ViewHelpRequestDTO> getReceivedRequests() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User principal = (User) authentication.getPrincipal();
+        Integer currentStudentId = principal.getId();
+
+        List<HelpRequest> receivedHelpRequests = helpRequestRepository.findByReceiverId(currentStudentId);
+
+        return receivedHelpRequests.stream().map(helpRequest -> {
+            return ViewHelpRequestDTO.builder()
+                    .helpRequestId(helpRequest.getId())
+                    .receiverId(helpRequest.getReceiver().getId())
+                    .receiverUsername(helpRequest.getReceiver().fullName())
+                    .senderId(helpRequest.getSender().getId())
+                    .senderUsername(helpRequest.getSender().fullName())
+                    .status(String.valueOf(helpRequest.getStatus()))
                     .build();
-            return lunchMatchDTO;
         }).toList();
 
     }

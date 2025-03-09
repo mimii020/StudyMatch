@@ -6,7 +6,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -24,7 +26,7 @@ public class Student extends User {
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
-    private List<Skill> desiredSkills = new ArrayList<>();
+    private Set<Skill> desiredSkills = new HashSet<>();
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JsonManagedReference
@@ -33,7 +35,7 @@ public class Student extends User {
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
-    private List<Skill> offeredSkills = new ArrayList<>();
+    private Set<Skill> offeredSkills = new HashSet<>();
 
     public void addOfferedSkill(Skill skill) {
         if (!offeredSkills.contains(skill)) {

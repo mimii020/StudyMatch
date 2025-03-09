@@ -5,8 +5,8 @@ import lombok.Builder;
 
 @AllArgsConstructor
 @Builder
-public class ViewLunchMatchDTO {
-    private Integer matchId;
+public class ViewHelpRequestDTO {
+    private Integer helpRequestId;
     private Integer senderId;
     private Integer receiverId;
 

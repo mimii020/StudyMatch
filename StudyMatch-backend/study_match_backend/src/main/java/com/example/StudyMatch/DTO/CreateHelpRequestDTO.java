@@ -1,5 +1,6 @@
 package com.example.StudyMatch.DTO;
 
+import com.example.StudyMatch.models.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class LunchMatchRequestDTO {
+public class CreateHelpRequestDTO {
     private Integer receiverId;
-    private LocalDateTime requestDate;
+    private Subject subject;
+    private String description;
 
 }

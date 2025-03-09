@@ -26,8 +26,12 @@ public class StudentSearchDao {
         CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class);
 
         Root<Student> student = criteriaQuery.from(Student.class);
+
         Join<Student, Skill> desiredSkillsJoin = student.join("desiredSkills", JoinType.LEFT);
         Join<Student, Skill> offeredSkillsJoin = student.join("offeredSkills", JoinType.LEFT);
+
+        student.fetch("desiredSkills", JoinType.LEFT);
+        student.fetch("offeredSkills", JoinType.LEFT);
 
         Predicate firstnamePredicate = criteriaBuilder
                 .like(student.get("firstname"), "%"+ firstname +"%");
@@ -54,7 +58,7 @@ public class StudentSearchDao {
 
         Predicate finalSkillPredicate = criteriaBuilder.or(skillPredicates.toArray(new Predicate[0]));
 
-        Predicate orPredicate = criteriaBuilder.and(
+        Predicate orPredicate = criteriaBuilder.or(
                 firstnamePredicate,
                 lastnamePredicate,
                 finalSkillPredicate

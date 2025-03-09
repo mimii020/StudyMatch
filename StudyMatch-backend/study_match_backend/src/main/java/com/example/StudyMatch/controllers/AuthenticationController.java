@@ -6,7 +6,9 @@ import com.example.StudyMatch.auth.AuthenticationResponse;
 import com.example.StudyMatch.auth.RegistrationRequest;
 import com.example.StudyMatch.auth.TokenBlackListService;
 import com.example.StudyMatch.services.AuthenticationService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +37,12 @@ public class AuthenticationController {
     //authenticate the user
     //The type specified in the ResponseEntity<> is the type of the response body. This type parameter defines the data type of the body content that will be returned in the HTTP response
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request) {
-
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody @Valid AuthenticationRequest request,
+            HttpServletResponse response
+    ) {
+        AuthenticationResponse authResponse = authenticationService.authenticate(request);
+        return ResponseEntity.ok(authResponse);
     }
 
     @PostMapping("/logout")

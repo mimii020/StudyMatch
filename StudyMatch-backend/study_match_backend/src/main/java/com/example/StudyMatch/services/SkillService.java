@@ -1,6 +1,8 @@
 package com.example.StudyMatch.services;
 
+import com.example.StudyMatch.DAO.SkillSearchBySubjectDao;
 import com.example.StudyMatch.DTO.CreateSkillDto;
+import com.example.StudyMatch.DTO.SkillViewDto;
 import com.example.StudyMatch.models.Skill;
 import com.example.StudyMatch.models.Subject;
 import com.example.StudyMatch.repositories.SkillRepository;
@@ -22,7 +24,8 @@ public class SkillService {
     private SkillRepository skillRepository;
     @Autowired
     private SubjectService subjectService;
-    // add a new interest
+    @Autowired
+    private SkillSearchBySubjectDao skillSearchDao;
     public Skill addSkill(Integer subjectId, CreateSkillDto createSkillDto) {
         Subject subject = this.subjectService.getSubjectById(subjectId);
         if (subject == null) {
@@ -58,8 +61,8 @@ public class SkillService {
     }
     //view a specific interest
 
-    public Skill getSkillById(Integer interestId) {
-        Skill skill = skillRepository.findById(interestId)
+    public Skill getSkillById(Integer skillId) {
+        Skill skill = skillRepository.findById(skillId)
                 .orElseThrow(() -> new RuntimeException(("interest not found")));
         return skill;
     }
@@ -79,6 +82,17 @@ public class SkillService {
             throw new RuntimeException("skills not found");
         }
         return skills;
+    }
+
+    public List<SkillViewDto> searchSkills(Integer subjectId, String searchQuery) {
+        List<Skill> skills = skillSearchDao.findBySubjectIdAndName(subjectId, searchQuery);
+        List<SkillViewDto> skillsDto = skills.stream().map((skill) -> SkillViewDto.builder()
+                .id(skill.getId())
+                .name(skill.getName())
+                .build()
+        ).toList();
+
+    return skillsDto;
     }
 
 }

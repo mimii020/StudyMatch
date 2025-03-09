@@ -1,5 +1,7 @@
 package com.example.StudyMatch.services;
 
+import com.example.StudyMatch.DTO.SkillViewDto;
+import com.example.StudyMatch.DTO.StudentViewDto;
 import com.example.StudyMatch.Security.JwtService;
 import com.example.StudyMatch.auth.AuthenticationRequest;
 import com.example.StudyMatch.auth.AuthenticationResponse;
@@ -7,6 +9,7 @@ import com.example.StudyMatch.auth.RegistrationRequest;
 import com.example.StudyMatch.auth.Token;
 
 import com.example.StudyMatch.models.Admin;
+import com.example.StudyMatch.models.RolesEnum;
 import com.example.StudyMatch.models.Student;
 import com.example.StudyMatch.repositories.AdminRepository;
 import com.example.StudyMatch.repositories.StudentRepository;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -96,6 +100,36 @@ public class AuthenticationService {
         claims.put("fullname", user.fullName());
         var jwtToken = jwtService.generateToken(claims, user);
         saveUserToken(user, jwtToken);
+        if (user.getRole() == RolesEnum.STUDENT) {
+            Student student = studentRepository.findByEmail(user.getEmail())
+                    .orElseThrow(() -> new RuntimeException("student not found"));
+            List<SkillViewDto> desiredSkills = student.getDesiredSkills().stream().map(
+                    (skill) -> SkillViewDto.builder()
+                            .id(skill.getId())
+                            .name(skill.getName())
+                            .build()
+            ).toList();
+
+            List<SkillViewDto> offeredSkills = student.getOfferedSkills().stream().map(
+                    (skill) -> SkillViewDto.builder()
+                            .id(skill.getId())
+                            .name(skill.getName())
+                            .build()
+                    )
+                    .toList();
+            return AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .student(StudentViewDto.builder()
+                            .id(student.getId())
+                            .firstname(student.getFirstname())
+                            .lastname(student.getLastname())
+                            .bio(student.getBio())
+                            .desiredSkills(desiredSkills)
+                            .offeredSkills(offeredSkills)
+                            .build()
+                    )
+                    .build();
+        }
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
