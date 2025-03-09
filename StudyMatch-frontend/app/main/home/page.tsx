@@ -1,6 +1,7 @@
 "use client"
 
 import FiltersPopup from '@/components/FiltersPopup';
+import HelpRequestPopup from '@/components/HelpRequestPopup';
 import SearchField from '@/components/SearchField'
 import StudentCard from '@/components/StudentCard'
 import { SkillTypeEnum } from '@/lib/enums/skill.type.enum';
@@ -13,13 +14,14 @@ import React, { useCallback, useEffect, useState } from 'react'
 function HomePage() {
   const [selectedOfferedSkills, setSelectedOfferedSkills] = useState<Skill[]>([]);
   const [selectedDesiredSkills, setSelectedDesiredSkills] = useState<Skill[]>([]);
-  const [isPopupOpen, setPopupOpen] = useState(false);
+  const [isFiltersPopupOpen, setFiltersPopupOpen] = useState(false);
+  const [requestPopupOpen, setRequestPopupOpen] = useState(false);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
 
 
-  const handlePrimaryClick = async () => {
-    setPopupOpen(false);
+  const handleFiltersPrimaryClick = async () => {
+    setFiltersPopupOpen(false);
   }
 
   const onOfferedToggle = useCallback((skill: Skill) => {
@@ -54,6 +56,11 @@ function HomePage() {
     isLoading,
     isError
   }] = useLazySearchStudentsQuery();
+
+  
+  const handleRequestPrimaryClick = () => {
+      setRequestPopupOpen(true);
+  };
 
   const handleApply = async () => {
     const finalOfferedSkills: SearchStudentSkill[] = selectedOfferedSkills.map((skill) => {
@@ -90,7 +97,7 @@ function HomePage() {
 
 
   return (
-    <div className="w-full h-full p-1">
+    <div className="w-full h-full p-1 relative">
       <div className="w-full flex gap-10 justify-between">
         <div className="h-[5.76%] w-[54%]">
           <SearchField 
@@ -104,24 +111,32 @@ function HomePage() {
             onChange={onLastnameChagne}
           />
         </div>
-        <button className='border-2 border-gray-400 rounded-2xl px-9' onClick={() => setPopupOpen(true)}>Filters</button>
+        <button className='border-2 border-gray-400 rounded-2xl px-9' onClick={() => setFiltersPopupOpen(true)}>Filters</button>
         <button className='bg-primary rounded-2xl text-white px-9' onClick={handleApply}>Apply</button>
       </div>
       <h1 className="font-extrabold font text-xl mt-4 mb-4">Discover Potential Matches</h1>
       { (students !== undefined) && <div className="grid grid-cols-3 gap-4 py-6 h-full">
         {
           students.map((student) => (
-              <StudentCard key={student.id} student={student}/>
+              <StudentCard 
+                key={student.id} 
+                student={student}
+                handlePrimaryClick={async () => handleRequestPrimaryClick()}
+              />
           ))
         }
       </div>
       }
       {
-        isPopupOpen && <FiltersPopup
+        isFiltersPopupOpen && <FiltersPopup
           onOfferedToggle={onOfferedToggle}
           onDesiredToggle={onDesiredToggle}
-          onPrimaryClick={handlePrimaryClick}
+          onPrimaryClick={handleFiltersPrimaryClick}
         />
+      }
+
+      {
+        requestPopupOpen && <HelpRequestPopup/>
       }
     </div>
   )

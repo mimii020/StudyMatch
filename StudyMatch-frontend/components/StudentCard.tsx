@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SkillTag from './SkillTag'
 import PrimaryButton from './PrimaryButton'
 import SecondaryButton from './SecondaryButton'
@@ -6,10 +6,11 @@ import { StudentProfile } from '@/lib/types/user.types'
 import { useRouter } from 'next/navigation'
 
 interface Props {
-  student: StudentProfile
+  student: StudentProfile;
+  handlePrimaryClick: (...args: any[]) => Promise<void>;
 }
 
-export default function StudentCard({student}: Props) {
+export default function StudentCard({ student, handlePrimaryClick}: Props) {
   const router = useRouter();
   
   return (
@@ -25,7 +26,7 @@ export default function StudentCard({student}: Props) {
           }
         </div>
         <div className="flex gap-4 absolute bottom-7">
-          <PrimaryButton text="Send Request"/>
+          <PrimaryButton text="Send Request" onClick={handlePrimaryClick}/>
           <SecondaryButton text="View Profile" onClick={async () => router.push(`profile/${student.id}`)}/>
         </div>
     </div>
