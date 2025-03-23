@@ -2,7 +2,7 @@ import { RequestStatusEnum } from "@/lib/enums/request.status.enum";
 
 export interface CreateHelpRequest {
     receiverId: number;
-    subject: Subject;
+    subjectId: number;
     description: string;
 }
 
@@ -12,5 +12,11 @@ export interface HelpRequest {
     receiverId: number;
     senderUsername: string;
     receiverUsername: string;
+    description: string;
+    subject: Subject;
+    status: RequestStatusEnum;
+}
+
+export interface UpdateHelpRequest {
     status: RequestStatusEnum;
 }

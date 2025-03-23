@@ -5,9 +5,12 @@ import HelpRequestPopup from '@/components/HelpRequestPopup';
 import SearchField from '@/components/SearchField'
 import StudentCard from '@/components/StudentCard'
 import { SkillTypeEnum } from '@/lib/enums/skill.type.enum';
+import { useSendHelpRequestMutation } from '@/lib/services/help-request/help.request.service';
+import { CreateHelpRequest } from '@/lib/services/help-request/interface';
 import { SearchStudentSkill, StudentSearchRequest } from '@/lib/services/profile/interface';
 import { useLazySearchStudentsQuery } from '@/lib/services/profile/user.profile.service';
 import { Skill } from '@/lib/services/skill/interface';
+import { useGetSubjectsQuery } from '@/lib/services/subject/subject.service';
 import React, { useCallback, useEffect, useState } from 'react'
 
 
@@ -16,6 +19,8 @@ function HomePage() {
   const [selectedDesiredSkills, setSelectedDesiredSkills] = useState<Skill[]>([]);
   const [isFiltersPopupOpen, setFiltersPopupOpen] = useState(false);
   const [requestPopupOpen, setRequestPopupOpen] = useState(false);
+  const [receiverId, setReceiverId] = useState<number | null>(null);
+  const [sendHelpRequest] = useSendHelpRequestMutation();  
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
 
@@ -53,14 +58,37 @@ function HomePage() {
 
   const [triggerSearch, {
     data: students,
-    isLoading,
-    isError
+    isLoading: isSearchLoading,
+    isError: isSearchError
   }] = useLazySearchStudentsQuery();
 
-  
-  const handleRequestPrimaryClick = () => {
-      setRequestPopupOpen(true);
-  };
+
+  const handleRequestSecondary = () => {
+    setRequestPopupOpen(false);
+  }
+
+  const handleRequestPrimary = async (
+    receiverId: number,
+    subjectId: number, 
+    description: string
+  ) => {
+    const helpRequest: CreateHelpRequest = {
+      receiverId: receiverId,
+      subjectId: subjectId,
+      description: description
+    };
+
+    try {
+      console.log(receiverId);
+      console.log(subjectId);
+      console.log(description);
+      const response = await sendHelpRequest(helpRequest);
+      console.log(response);
+      setRequestPopupOpen(false);
+    } catch (err) {
+      console.error('Sending Help Request failed:', err);
+    }
+  }
 
   const handleApply = async () => {
     const finalOfferedSkills: SearchStudentSkill[] = selectedOfferedSkills.map((skill) => {
@@ -121,7 +149,10 @@ function HomePage() {
               <StudentCard 
                 key={student.id} 
                 student={student}
-                handlePrimaryClick={async () => handleRequestPrimaryClick()}
+                handlePrimaryClick={async () => {
+                  setRequestPopupOpen(true)
+                  setReceiverId(student.id)
+                }}
               />
           ))
         }
@@ -136,7 +167,11 @@ function HomePage() {
       }
 
       {
-        requestPopupOpen && <HelpRequestPopup/>
+        requestPopupOpen && receiverId && <HelpRequestPopup
+          receiverId={receiverId} 
+          handleSecondary={handleRequestSecondary}
+          handlePrimary={handleRequestPrimary}
+        />
       }
     </div>
   )
