@@ -3,19 +3,22 @@ import { studentApi } from '../services/profile/user.profile.service';
 import authSlice from '../services/auth/authSlice';
 import { subjectApi } from '../services/subject/subject.service';
 import { skillApi } from '../services/skill/skill.service';
+import { helpRequestApi } from '../services/help-request/help.request.service';
 
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
     [studentApi.reducerPath]: studentApi.reducer,
     [subjectApi.reducerPath]: subjectApi.reducer,
-    [skillApi.reducerPath]: skillApi.reducer
+    [skillApi.reducerPath]: skillApi.reducer,
+    [helpRequestApi.reducerPath]: helpRequestApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       studentApi.middleware, 
       skillApi.middleware, 
-      subjectApi.middleware
+      subjectApi.middleware,
+      helpRequestApi.middleware,
     ),
 });
 
