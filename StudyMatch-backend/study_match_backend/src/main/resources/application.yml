@@ -2,12 +2,10 @@ spring:
   application:
     name:
       StudyMatch
-    security:
-      #jwt:
-       # secret:
-        #  yJh5v7Jj8QxM2Bv5FfXxg+wzBczl0epDlMqNl5Gn4w76sKKhQFekM0VGl9uPjXBw
-        #expiration:
-         # 900000
+  security:
+    jwt:
+      secret-key: $(JWT_SECRET_KEY
+      expiration: 900000
 
   datasource:
     url: jdbc:postgresql://localhost:5433/lunch_match
@@ -36,3 +34,9 @@ springdoc:
     path: /api/v1/swagger-ui.html
   api-docs:
     path: /api/v1/v3/api-docs
+
+forge:
+  api:
+    url: mydev-site.atlassian.net/forge/resolver/createStudyProject
+    token: $(FORGE_TOKEN
+    leadAccountId: $(LEAD_ACCOUNT_ID)

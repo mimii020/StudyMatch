@@ -3,11 +3,11 @@
 import ReceivedRequestCard from "@/components/ReceivedequestCard";
 import { RequestStatusEnum } from "@/lib/enums/request.status.enum";
 import { useGetReceivedRequestsQuery, useGetSentRequestsQuery, useUpdateHelpRequestMutation } from "@/lib/services/help-request/help.request.service";
-import { UpdateHelpRequest } from "@/lib/services/help-request/interface";
+import { HelpRequest, UpdateHelpRequest } from "@/lib/services/help-request/interface";
 import React from "react";
 
 function Page() {
-  const {data: receivedRequest, refetch} = useGetReceivedRequestsQuery();
+  const {data: receivedRequests, refetch} = useGetReceivedRequestsQuery();
   const [updateHelpRequest] = useUpdateHelpRequestMutation();
 
   const handlePrimary = async (requestId: number) => {
@@ -19,6 +19,7 @@ function Page() {
       const response = await updateHelpRequest({requestId, updateRequest});
       console.log(response);
       await refetch();
+      receivedRequests?.splice(requestId);
     } catch (e) {
       console.log(e);
     }
@@ -33,6 +34,7 @@ function Page() {
       const response = await updateHelpRequest({requestId, updateRequest});
       console.log(response);
       await refetch();
+      receivedRequests?.splice(requestId);
     } catch (e) {
       console.log(e);
     }
@@ -41,7 +43,7 @@ function Page() {
   return (
     <div className="w-full h-full">
       {
-        receivedRequest !=undefined && receivedRequest.length>0 ? receivedRequest.map((request) => (
+        receivedRequests !=undefined && receivedRequests.length>0 ? receivedRequests.map((request) => (
           <ReceivedRequestCard 
             key={request.helpRequestId} 
             senderUsername={request.senderUsername}

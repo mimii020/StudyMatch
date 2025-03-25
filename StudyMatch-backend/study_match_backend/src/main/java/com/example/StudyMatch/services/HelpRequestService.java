@@ -1,13 +1,14 @@
 package com.example.StudyMatch.services;
 
+import com.example.StudyMatch.DTO.UpdateHelpRequestResponse;
 import com.example.StudyMatch.DTO.CreateHelpRequestDTO;
 
+import com.example.StudyMatch.DTO.SubjectViewDto;
 import com.example.StudyMatch.DTO.ViewHelpRequestDTO;
-import com.example.StudyMatch.models.HelpRequest;
-import com.example.StudyMatch.models.HelpRequestStatus;
-import com.example.StudyMatch.models.Student;
+import com.example.StudyMatch.models.*;
 import com.example.StudyMatch.repositories.HelpRequestRepository;
 import com.example.StudyMatch.repositories.StudentRepository;
+import com.example.StudyMatch.repositories.SubjectRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.example.StudyMatch.models.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,34 +27,56 @@ public class HelpRequestService {
     private HelpRequestRepository helpRequestRepository;
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private SubjectRepository subjectRepository;
+    @Autowired
+    private ForgeService forgeService;
     //sendRequest
-    public HelpRequest sendHelpRequest(CreateHelpRequestDTO helpRequestDTO, Authentication authentication) {
+    public ViewHelpRequestDTO sendHelpRequest(CreateHelpRequestDTO helpRequestDTO, Authentication authentication) {
         User principal = (User) authentication.getPrincipal();
         Integer senderId = principal.getId();
         Integer receiverId = helpRequestDTO.getReceiverId();
+        Integer subjectId = helpRequestDTO.getSubjectId();
+
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new RuntimeException("subject not found"));
 
         Student receiver =  studentRepository.findById(receiverId)
-                .orElseThrow(() -> new RuntimeException("reciever not found"));
+                .orElseThrow(() -> new RuntimeException("receiver not found"));
 
         Student sender =  studentRepository.findById(senderId)
                 .orElseThrow(() -> new RuntimeException("sender not found"));
 
-        if (sender == null || receiver == null) {
+        if (sender == null || receiver == null || subject == null) {
            throw new EntityNotFoundException("entity was not found");
-
         }
 
         HelpRequest helpRequest = HelpRequest.builder()
                 .createdAt(LocalDateTime.now())
                 .sender(sender)
                 .receiver(receiver)
+                .subject(subject)
+                .description(helpRequestDTO.getDescription())
                 .status(HelpRequestStatus.PENDING)
                 .build();
-        return  helpRequestRepository.save(helpRequest);
+        HelpRequest createdHelpRequest =  helpRequestRepository.save(helpRequest);
+        return ViewHelpRequestDTO.builder()
+                .helpRequestId(createdHelpRequest.getId())
+                .receiverId(createdHelpRequest.getReceiver().getId())
+                .senderId(createdHelpRequest.getSender().getId())
+                .senderUsername(createdHelpRequest.getSender().getUsername())
+                .receiverUsername(createdHelpRequest.getReceiver().getUsername())
+                .subject(SubjectViewDto.builder()
+                        .id(createdHelpRequest.getSubject().getId())
+                        .name(createdHelpRequest.getSubject().getName())
+                        .build())
+                .description(createdHelpRequest.getDescription())
+                .status(createdHelpRequest.getStatus())
+                .build();
 
     }
 
-    public HelpRequest updateRequestStatus(Integer helpRequestId, HelpRequestStatus status) {
+    public UpdateHelpRequestResponse updateRequestStatus(Integer helpRequestId, HelpRequestStatus status) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User principal = (User) authentication.getPrincipal();
@@ -70,8 +92,40 @@ public class HelpRequestService {
         }
 
         helpRequest.setStatus(status);
-        return helpRequestRepository.save(helpRequest);
+        HelpRequest updatedHelpRequest = helpRequestRepository.save(helpRequest);
 
+        ViewHelpRequestDTO viewHelpRequestDTO = ViewHelpRequestDTO.builder()
+                .helpRequestId(updatedHelpRequest.getId())
+                .status(updatedHelpRequest.getStatus())
+                .subject(SubjectViewDto.builder()
+                        .id(updatedHelpRequest.getSubject().getId())
+                        .name(updatedHelpRequest.getSubject().getName())
+                        .build())
+                .receiverId(updatedHelpRequest.getReceiver().getId())
+                .senderId(updatedHelpRequest.getSender().getId())
+                .senderUsername(updatedHelpRequest.getSender().getUsername())
+                .receiverUsername(updatedHelpRequest.getReceiver().getUsername())
+                .description(updatedHelpRequest.getDescription())
+                .build();
+
+        if (status == HelpRequestStatus.ACCEPTED) {
+            String projectKey = forgeService.createJiraProject(
+                    updatedHelpRequest.getSender().getUsername(),
+                    updatedHelpRequest.getReceiver().getUsername()
+            );
+
+            return UpdateHelpRequestResponse.builder()
+                    .viewHelpRequestDTO(viewHelpRequestDTO)
+                    .jiraProjectKey(projectKey)
+                    .build();
+        }
+
+        else if (status == HelpRequestStatus.DENIED) {
+            return UpdateHelpRequestResponse.builder()
+                    .viewHelpRequestDTO(viewHelpRequestDTO)
+                    .build();
+        }
+        return null;
     }
 
 
@@ -90,7 +144,12 @@ public class HelpRequestService {
                     .receiverUsername(helpRequest.getReceiver().fullName())
                     .senderId(helpRequest.getSender().getId())
                     .senderUsername(helpRequest.getSender().fullName())
-                    .status(String.valueOf(helpRequest.getStatus()))
+                    .description(helpRequest.getDescription())
+                    .subject(SubjectViewDto.builder()
+                            .id(helpRequest.getSubject().getId())
+                            .name(helpRequest.getSubject().getName())
+                            .build())
+                    .status(helpRequest.getStatus())
                     .build();
         }).toList();
 
@@ -112,7 +171,12 @@ public class HelpRequestService {
                     .receiverUsername(helpRequest.getReceiver().fullName())
                     .senderId(helpRequest.getSender().getId())
                     .senderUsername(helpRequest.getSender().fullName())
-                    .status(String.valueOf(helpRequest.getStatus()))
+                    .subject(SubjectViewDto.builder()
+                            .id(helpRequest.getSubject().getId())
+                            .name(helpRequest.getSubject().getName())
+                            .build())
+                    .status(helpRequest.getStatus())
+                    .description(helpRequest.getDescription())
                     .build();
         }).toList();
 
