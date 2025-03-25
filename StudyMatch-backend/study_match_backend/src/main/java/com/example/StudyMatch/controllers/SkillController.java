@@ -50,7 +50,7 @@ public class SkillController {
     //delete a specific skill
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSkimmByIdd(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteSkillByIdd(@PathVariable Integer id) {
         skillService.deleteSkill(id);
         return ResponseEntity.noContent().build();
     }

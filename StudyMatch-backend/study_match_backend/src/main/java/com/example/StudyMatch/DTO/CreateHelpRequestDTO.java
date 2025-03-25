@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 public class CreateHelpRequestDTO {
     private Integer receiverId;
-    private Subject subject;
+    private Integer subjectId;
     private String description;
 
 }

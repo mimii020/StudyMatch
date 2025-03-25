@@ -1,0 +1,20 @@
+modules:
+  jira:projectPage:
+    - key: jira-forge-hello-world-project-page
+      resource: main
+      resolver:
+        function: resolver
+      render: native
+      title: Jira-Forge
+  function:
+    - key: resolver
+      handler: index.handler
+resources:
+  - key: main
+    path: src/frontend/index.jsx
+app:
+  runtime:
+    name: nodejs22.x
+  id: ari:cloud:ecosystem::app/a7453c95-9596-4048-b310-cf26373ca28c
+permissions:
+  scopes: []
